@@ -1,5 +1,6 @@
 use std::{ops, fmt};
-
+use crate::types::point3::Point3;
+use crate::types::color::Color;
 
 
 #[derive(Clone, Copy)]
@@ -10,9 +11,6 @@ pub struct Vec3 {
 }
 
 impl Vec3 {
-    pub fn new(&self) -> Vec3 {
-        unimplemented!();
-    }
 
     pub fn length(&self) -> f64 {
         (self.length_squared().sqrt())
@@ -154,6 +152,18 @@ impl ops::DivAssign<f64> for Vec3 {
             z : self.z / other,
         };
     }
+}
+
+pub fn vector( x : f64, y : f64, z: f64) -> Vec3 {
+    Vec3 { x , y , z }
+}
+
+pub fn color( x : f64, y : f64, z: f64) -> Color {
+    Vec3 { x , y , z }
+}
+
+pub fn point3( x : f64, y : f64, z: f64) -> Point3 {
+    Vec3 { x , y , z }
 }
 
 pub fn cross(this: Vec3, other: Vec3) -> Vec3 {

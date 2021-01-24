@@ -1,29 +1,35 @@
 use std::fs::File;
 use std::io::{Write, Error};
-use crate::types::vec3::{Vec3, unit, dot};
+use crate::types::vec3::{Vec3, unit, dot, vector, color, point3};
 use crate::types::color::Color;
-use crate::types::ray::Ray;
+use crate::types::ray::{Ray};
 use crate::types::point3::Point3;
 
 mod types;
 
-fn hit_sphere( center: Point3, radius : f64, r: Ray) -> bool {
+fn hit_sphere( center: Point3, radius : f64, r: Ray) -> f64 {
     let oc = r.origin() - center;
-    let a = dot(r.direction(), r.direction());
-    let b = 2.0 * dot(oc, r.direction());
-    let c = dot(oc, oc) - radius*radius;
-    let discriminant = b*b - 4.0*a*c;
-        discriminant > 0.0
+    let a = r.direction().length_squared();
+    let half_b = dot(oc, r.direction());
+    let c = oc.length_squared() -radius * radius;
+    let discriminant = half_b* half_b - a*c;
+        if discriminant < 0.0 {
+            -1.0
+        } else {
+            -half_b - discriminant.sqrt() / a
+        }
 }
 
-fn ray_color(ray : Ray) -> Color {
-    if hit_sphere(Point3 { x : 0.0,y : 0.0,z : -1.0 }, 0.5, ray) {
-        return Color { x: 1.0, y: 1.0, z: 1.0 }
+fn ray_color(r : Ray) -> Color {
+    let t = hit_sphere(point3(0.0,0.0,-1.0), 0.5, r);
+    if t > 0.0 {
+        let N = unit(r.at(t) - vector(0.0, 0.0, -1.0));
+        return 0.5* color( N.x + 1.0, N.y + 1.0, N.z + 1.0 );
     }
 
-    let unit_dir = unit(ray.direction());
+    let unit_dir = unit(r.direction());
     let t = 0.5*(unit_dir.y + 1.0);
-    (1.0-t)* Color{x : 1.0, y : 1.0, z : 1.0} + t * Color{x : 0.5, y : 0.7, z : 1.0}
+    (1.0-t)* color(1.0,1.0,1.0) + t * color(0.5, 0.7, 1.0)
 }
 
 
@@ -43,10 +49,10 @@ fn main() -> Result<(), Error> {
     let vp_w = ratio * vp_h;
     let focal_length = 1.0;
 
-    let origin = types::point3::Point3 { x: 0.0, y: 0.0, z: 0.0};
-    let horizontal = types::vec3::Vec3 { x: vp_w, y: 0.0, z: 0.0};
-    let vertical = types::vec3::Vec3 {x: 0.0, y : vp_h,z : 0.0};
-    let lower_left_corner = origin - horizontal/2.0 - vertical/2.0 - Vec3{x : 0.0, y: 0.0, z: focal_length};
+    let origin = point3(0.0, 0.0,  0.0);
+    let horizontal = vector (vp_w, 0.0, 0.0);
+    let vertical = vector ( 0.0, vp_h,0.0);
+    let lower_left_corner = origin - horizontal/2.0 - vertical/2.0 - vector(0.0, 0.0,focal_length);
 
     // Render
 
@@ -62,8 +68,8 @@ fn main() -> Result<(), Error> {
             let u = i as f64 / (w-1) as f64;
             let v = j as f64 / (h-1) as f64;
 
-            let ray = Ray { orig : origin, dir : lower_left_corner  + u*horizontal + v*vertical - origin};
-            let color = ray_color(ray);
+            let r = Ray::ray(origin, lower_left_corner  + u*horizontal + v*vertical - origin);
+            let color = ray_color(r);
             types::color::write_color(&mut output, color);
         }
     }
