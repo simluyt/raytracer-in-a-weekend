@@ -1,4 +1,4 @@
-use std::io::{Write, Stdout};
+use std::io::{Write};
 use crate::types::vec3::Vec3;
 use std::fs::File;
 

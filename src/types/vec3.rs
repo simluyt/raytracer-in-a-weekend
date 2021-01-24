@@ -1,7 +1,6 @@
 use std::{ops, fmt};
 
 
-pub type Point3 = Vec3;
 
 #[derive(Clone, Copy)]
 pub struct Vec3 {
