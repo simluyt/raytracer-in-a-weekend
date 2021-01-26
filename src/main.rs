@@ -1,11 +1,15 @@
 use std::fs::File;
 use std::io::{Write, Error};
-use crate::types::vec3::{Vec3, unit, dot, vector, color, point3};
+use crate::types::vec3::{unit, dot, vector, color, point3};
 use crate::types::color::Color;
 use crate::types::ray::{Ray};
 use crate::types::point3::Point3;
-
+use crate::types::hittable::Hittable;
+use crate::types::hittables::Hittables;
+use crate::types::hitrecord::Hitrecord;
+use crate::types::sphere::Sphere;
 mod types;
+mod util;
 
 fn hit_sphere( center: Point3, radius : f64, r: Ray) -> f64 {
     let oc = r.origin() - center;
@@ -20,11 +24,10 @@ fn hit_sphere( center: Point3, radius : f64, r: Ray) -> f64 {
         }
 }
 
-fn ray_color(r : Ray) -> Color {
-    let t = hit_sphere(point3(0.0,0.0,-1.0), 0.5, r);
-    if t > 0.0 {
-        let N = unit(r.at(t) - vector(0.0, 0.0, -1.0));
-        return 0.5* color( N.x + 1.0, N.y + 1.0, N.z + 1.0 );
+fn ray_color(r : Ray, world: &mut Hittables) -> Color {
+    let mut rec = Hitrecord::new_empty();
+    if world.hit(&r, 0.0, std::f64::INFINITY, &mut rec) {
+        return 0.5* (rec.normal + color(1.0,1.0,1.0))
     }
 
     let unit_dir = unit(r.direction());
@@ -41,6 +44,14 @@ fn main() -> Result<(), Error> {
 
     let w = 400;
     let h = (w as f64 / ratio) as i32;
+
+    // World
+
+    let world : &mut Hittables = &mut Hittables {
+        items: vec![]
+    };
+    world.add(Box::new(Sphere::sphere(point3(0.0,0.0,-1.0), 0.5)));
+    world.add(Box::new(Sphere::sphere(point3(0.0,-100.5,-1.0), 100.0)));
 
 
     // Camera
@@ -68,8 +79,8 @@ fn main() -> Result<(), Error> {
             let u = i as f64 / (w-1) as f64;
             let v = j as f64 / (h-1) as f64;
 
-            let r = Ray::ray(origin, lower_left_corner  + u*horizontal + v*vertical - origin);
-            let color = ray_color(r);
+            let r = Ray::ray(origin, lower_left_corner  + u*horizontal + v*vertical);
+            let color = ray_color(r, world);
             types::color::write_color(&mut output, color);
         }
     }
