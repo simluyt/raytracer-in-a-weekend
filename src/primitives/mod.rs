@@ -6,5 +6,6 @@ pub mod hittable;
 pub mod sphere;
 pub mod hitrecord;
 pub mod hittables;
+pub mod camera;
 
 

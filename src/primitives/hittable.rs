@@ -1,5 +1,5 @@
-use crate::types::ray::Ray;
-use crate::types::hitrecord::Hitrecord;
+use crate::primitives::ray::Ray;
+use crate::primitives::hitrecord::Hitrecord;
 
 pub trait Hittable {
 

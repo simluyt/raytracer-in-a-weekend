@@ -1,15 +1,19 @@
 use std::fs::File;
 use std::io::{Write, Error};
-use crate::types::vec3::{unit, dot, vector, color, point3};
-use crate::types::color::Color;
-use crate::types::ray::{Ray};
-use crate::types::point3::Point3;
-use crate::types::hittable::Hittable;
-use crate::types::hittables::Hittables;
-use crate::types::hitrecord::Hitrecord;
-use crate::types::sphere::Sphere;
-mod types;
+use primitives::vec3::{unit, dot};
+use primitives::color::{Color, color, write_color};
+use primitives::ray::{Ray};
+use primitives::point3::{Point3, point3};
+use primitives::hittable::Hittable;
+use primitives::hittables::Hittables;
+use primitives::hitrecord::Hitrecord;
+use primitives::sphere::Sphere;
+use crate::primitives::camera::Camera;
+use crate::math::rand::random_float;
+
+mod primitives;
 mod util;
+mod math;
 
 fn hit_sphere( center: Point3, radius : f64, r: Ray) -> f64 {
     let oc = r.origin() - center;
@@ -45,6 +49,8 @@ fn main() -> Result<(), Error> {
     let w = 400;
     let h = (w as f64 / ratio) as i32;
 
+    let samples = 100;
+
     // World
 
     let world : &mut Hittables = &mut Hittables {
@@ -56,14 +62,7 @@ fn main() -> Result<(), Error> {
 
     // Camera
 
-    let vp_h = 2.0;
-    let vp_w = ratio * vp_h;
-    let focal_length = 1.0;
-
-    let origin = point3(0.0, 0.0,  0.0);
-    let horizontal = vector (vp_w, 0.0, 0.0);
-    let vertical = vector ( 0.0, vp_h,0.0);
-    let lower_left_corner = origin - horizontal/2.0 - vertical/2.0 - vector(0.0, 0.0,focal_length);
+    let camera = Camera::camera();
 
     // Render
 
@@ -76,12 +75,14 @@ fn main() -> Result<(), Error> {
         print!("\rScanlines remaining : {} of {}", j,h);
         for i in 0..w {
 
-            let u = i as f64 / (w-1) as f64;
-            let v = j as f64 / (h-1) as f64;
-
-            let r = Ray::ray(origin, lower_left_corner  + u*horizontal + v*vertical);
-            let color = ray_color(r, world);
-            types::color::write_color(&mut output, color);
+            let mut pixel_color = color(0.0, 0.0, 0.0);
+            for _s in 0..samples {
+                let u = (i as f64 + random_float()) / (w-1) as f64;
+                let v = (j as f64 + random_float()) / (h-1) as f64;
+                let r : Ray = camera.get_ray(u, v);
+                pixel_color += ray_color(r, world);
+            }
+            write_color(&mut output, pixel_color, samples);
         }
     }
 

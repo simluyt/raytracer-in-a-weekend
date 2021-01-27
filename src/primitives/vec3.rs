@@ -1,6 +1,4 @@
 use std::{ops, fmt};
-use crate::types::point3::Point3;
-use crate::types::color::Color;
 
 
 #[derive(Clone, Copy)]
@@ -32,7 +30,6 @@ impl fmt::Display for Vec3 {
         write!(f, "{} {} {}", self.x, self.y, self.z)
     }
 }
-
 
 
 impl ops::Neg for Vec3 {
@@ -154,17 +151,13 @@ impl ops::DivAssign<f64> for Vec3 {
     }
 }
 
+
+
 pub fn vector( x : f64, y : f64, z: f64) -> Vec3 {
     Vec3 { x , y , z }
 }
 
-pub fn color( x : f64, y : f64, z: f64) -> Color {
-    Vec3 { x , y , z }
-}
 
-pub fn point3( x : f64, y : f64, z: f64) -> Point3 {
-    Vec3 { x , y , z }
-}
 
 pub fn cross(this: Vec3, other: Vec3) -> Vec3 {
     Vec3 {

@@ -1,6 +1,6 @@
-use crate::types::hittable::Hittable;
-use crate::types::ray::Ray;
-use crate::types::hitrecord::Hitrecord;
+use crate::primitives::hittable::Hittable;
+use crate::primitives::hitrecord::Hitrecord;
+use crate::primitives::ray::Ray;
 
 pub struct Hittables {
     pub(crate) items :  Vec<Box<dyn Hittable>>

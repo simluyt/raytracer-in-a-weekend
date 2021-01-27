@@ -1,8 +1,8 @@
-use crate::types::point3::Point3;
-use crate::types::hittable::{Hittable};
-use crate::types::ray::Ray;
-use crate::types::vec3::dot;
-use crate::types::hitrecord::Hitrecord;
+use crate::primitives::hittable::Hittable;
+use crate::primitives::hitrecord::Hitrecord;
+use crate::primitives::ray::Ray;
+use crate::primitives::vec3::dot;
+use crate::primitives::point3::Point3;
 
 pub(crate) struct Sphere {
     center: Point3,

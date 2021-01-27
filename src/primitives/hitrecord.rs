@@ -1,6 +1,6 @@
-use crate::types::point3::Point3;
-use crate::types::vec3::{Vec3, dot, point3, vector};
-use crate::types::ray::Ray;
+use crate::primitives::point3::{Point3, point3};
+use crate::primitives::vec3::{Vec3, vector, dot};
+use crate::primitives::ray::Ray;
 
 #[derive(Clone, Copy)]
 pub struct Hitrecord {
