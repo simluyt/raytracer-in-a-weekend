@@ -57,7 +57,7 @@ fn main() -> Result<(), Error> {
         items: vec![]
     };
     world.add(Box::new(Sphere::sphere(point3(0.0,0.0,-1.0), 0.5)));
-    world.add(Box::new(Sphere::sphere(point3(0.0,-100.5,-1.0), 100.0)));
+    //world.add(Box::new(Sphere::sphere(point3(0.0,-100.5,-1.0), 100.0)));
 
 
     // Camera
@@ -72,6 +72,7 @@ fn main() -> Result<(), Error> {
     write!(output, "P3\n{} {}\n255\n", w ,h);
 
     for j in (0..(h)).rev() {
+        //Basic loading
         print!("\rScanlines remaining : {} of {}", j,h);
         for i in 0..w {
 
