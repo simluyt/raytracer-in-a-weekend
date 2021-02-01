@@ -18,9 +18,9 @@ pub fn write_color(out: &mut File, pixel : Color, samples : i32) {
     b *= scale;
 
     let r = format!("{} {} {}\n",
-                    256.0 * clamp(r, 0.0, 0.999),
-                    256.0 * clamp(g, 0.0, 0.999),
-                    256.0 * clamp(b, 0.0, 0.999));
+                    256.0 * clamp(r.sqrt(), 0.0, 0.999),
+                    256.0 * clamp(g.sqrt(), 0.0, 0.999),
+                    256.0 * clamp(b.sqrt(), 0.0, 0.999));
 
     out.write(r.as_bytes());
 }

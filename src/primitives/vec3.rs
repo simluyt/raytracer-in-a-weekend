@@ -1,4 +1,5 @@
 use std::{ops, fmt};
+use crate::math::rand::{random_float, random_float_range};
 
 
 #[derive(Clone, Copy)]
@@ -36,7 +37,7 @@ impl ops::Neg for Vec3 {
     type Output = Vec3;
 
     fn neg(self) -> Self::Output {
-        unimplemented!()
+        Vec3 { x: -1.0 * self.x, y: -1.0 * self.y, z: -1.0 * self.z }
     }
 }
 
@@ -176,3 +177,10 @@ pub fn unit(this: Vec3) -> Vec3 {
     this * (1.0/this.length())
 }
 
+pub fn random_vector() -> Vec3 {
+    return vector(random_float(), random_float(), random_float());
+}
+
+pub fn random_vector_range(min: i32, max: i32) -> Vec3 {
+    return vector(random_float_range(min,max), random_float_range(min,max), random_float_range(min,max));
+}

@@ -10,6 +10,7 @@ use primitives::hitrecord::Hitrecord;
 use primitives::sphere::Sphere;
 use crate::primitives::camera::Camera;
 use crate::math::rand::random_float;
+use crate::primitives::point3::{random_in_unit_sphere, random_unit_vector};
 
 mod primitives;
 mod util;
@@ -28,10 +29,17 @@ fn hit_sphere( center: Point3, radius : f64, r: Ray) -> f64 {
         }
 }
 
-fn ray_color(r : Ray, world: &mut Hittables) -> Color {
+fn ray_color(r : Ray, world: &mut Hittables, depth: i32) -> Color {
     let mut rec = Hitrecord::new_empty();
-    if world.hit(&r, 0.0, std::f64::INFINITY, &mut rec) {
-        return 0.5* (rec.normal + color(1.0,1.0,1.0))
+
+    if depth <= 0 {
+        return color(0.0,0.0,0.0);
+    }
+
+    if world.hit(&r, 0.001, std::f64::INFINITY, &mut rec) {
+        let target = rec.p + rec.normal + random_unit_vector();
+        //return 0.5* ((rec.normal + color(1.0,1.0,1.0)));
+        return 0.5* ray_color(Ray::ray(rec.p,target-rec.p), world,depth-1);
     }
 
     let unit_dir = unit(r.direction());
@@ -51,13 +59,15 @@ fn main() -> Result<(), Error> {
 
     let samples = 100;
 
+    let max : i32 = 5;
+
     // World
 
     let world : &mut Hittables = &mut Hittables {
         items: vec![]
     };
     world.add(Box::new(Sphere::sphere(point3(0.0,0.0,-1.0), 0.5)));
-    //world.add(Box::new(Sphere::sphere(point3(0.0,-100.5,-1.0), 100.0)));
+    world.add(Box::new(Sphere::sphere(point3(0.0,-100.5,-1.0), 100.0)));
 
 
     // Camera
@@ -81,7 +91,7 @@ fn main() -> Result<(), Error> {
                 let u = (i as f64 + random_float()) / (w-1) as f64;
                 let v = (j as f64 + random_float()) / (h-1) as f64;
                 let r : Ray = camera.get_ray(u, v);
-                pixel_color += ray_color(r, world);
+                pixel_color += ray_color(r, world, max);
             }
             write_color(&mut output, pixel_color, samples);
         }
