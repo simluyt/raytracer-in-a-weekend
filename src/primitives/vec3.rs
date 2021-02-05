@@ -184,3 +184,6 @@ pub fn random_vector() -> Vec3 {
 pub fn random_vector_range(min: i32, max: i32) -> Vec3 {
     return vector(random_float_range(min,max), random_float_range(min,max), random_float_range(min,max));
 }
+pub fn reflect(v : &Vec3, n : &Vec3) -> Vec3 {
+return *v - 2.0**n*dot(*v, *n);
+}

@@ -1,4 +1,4 @@
-use crate::primitives::vec3::{Vec3, random_vector_range, unit};
+use crate::primitives::vec3::{Vec3, random_vector_range, unit, dot};
 
 pub type Point3 = Vec3;
 
@@ -24,4 +24,12 @@ pub fn random_in_unit_sphere() -> Point3 {
 
 pub fn random_unit_vector() -> Vec3{
     return unit(random_in_unit_sphere());
+}
+
+pub fn random_in_hemisphere(normal : Vec3) -> Point3{
+let in_unit_sphere = random_in_unit_sphere();
+if dot(in_unit_sphere, normal) > 0.0 {
+    return in_unit_sphere;
+}
+return -in_unit_sphere;
 }

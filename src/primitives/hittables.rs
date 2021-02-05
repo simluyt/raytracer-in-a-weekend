@@ -3,7 +3,7 @@ use crate::primitives::hitrecord::Hitrecord;
 use crate::primitives::ray::Ray;
 
 pub struct Hittables {
-    pub(crate) items :  Vec<Box<dyn Hittable>>
+    pub items :  Vec<Box<dyn Hittable>>
 }
 
 impl Hittables {

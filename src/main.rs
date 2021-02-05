@@ -10,9 +10,13 @@ use primitives::hitrecord::Hitrecord;
 use primitives::sphere::Sphere;
 use crate::primitives::camera::Camera;
 use crate::math::rand::random_float;
-use crate::primitives::point3::{random_in_unit_sphere, random_unit_vector};
+use crate::primitives::point3::{random_in_unit_sphere, random_unit_vector, random_in_hemisphere};
+use material::lambertian::{lambertian};
+use material::metal::{metal};
+use crate::primitives::vec3::Vec3;
 
 mod primitives;
+mod material;
 mod util;
 mod math;
 
@@ -37,9 +41,24 @@ fn ray_color(r : Ray, world: &mut Hittables, depth: i32) -> Color {
     }
 
     if world.hit(&r, 0.001, std::f64::INFINITY, &mut rec) {
-        let target = rec.p + rec.normal + random_unit_vector();
+        let mut scattered: Ray = Ray::ray(Vec3 {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0
+        }, Vec3 {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0
+        });
+        let mut attenuation: Color = color(0.0, 0.0, 0.0);
+        if rec.material.scatter(&r, &mut rec, &mut attenuation, &mut scattered) {
+            return attenuation * ray_color(scattered,world,depth-1);
+        }
+        //let target = rec.p + rec.normal + random_unit_vector();
+        //let target = rec.p + random_in_hemisphere(rec.normal);
         //return 0.5* ((rec.normal + color(1.0,1.0,1.0)));
-        return 0.5* ray_color(Ray::ray(rec.p,target-rec.p), world,depth-1);
+        //return 0.5* ray_color(Ray::ray(rec.p,target-rec.p), world,depth-1);
+        return color(0.0,0.0,0.0);
     }
 
     let unit_dir = unit(r.direction());
@@ -66,8 +85,14 @@ fn main() -> Result<(), Error> {
     let world : &mut Hittables = &mut Hittables {
         items: vec![]
     };
-    world.add(Box::new(Sphere::sphere(point3(0.0,0.0,-1.0), 0.5)));
-    world.add(Box::new(Sphere::sphere(point3(0.0,-100.5,-1.0), 100.0)));
+
+    let material_ground = lambertian(color(0.8, 0.8, 0.0));
+    let material_center = lambertian(color(0.7, 0.3, 0.3));
+    let material_left   = metal(color(0.8, 0.8, 0.8));
+    let material_right  = metal(color(0.8, 0.6, 0.2));
+
+    world.add(Sphere::sphere(point3(0.0,0.0,-1.0), 0.5, Box::new(material_ground)));
+    world.add(Sphere::sphere(point3(0.0,-100.5,-1.0), 100.0, Box::new(material_center)));
 
 
     // Camera
