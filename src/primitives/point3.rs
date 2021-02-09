@@ -10,15 +10,14 @@ pub fn point3( x : f64, y : f64, z: f64) -> Point3 {
 }
 
 pub fn random_in_unit_sphere() -> Point3 {
-    while(true) {
+    loop {
         let p : Point3 = random_vector_range(-1,1);
-        if (p.length_squared() >= 1.0) {
+        if p.length_squared() >= 1.0 {
             continue;
         };
 
         return p;
     }
-    return point3(0.0,0.0,0.0);
 }
 
 

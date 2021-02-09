@@ -1,13 +1,13 @@
 use crate::primitives::point3::{Point3, point3};
 use crate::primitives::vec3::{Vec3, vector, dot};
 use crate::primitives::ray::Ray;
-use crate::material::materialize::Materialize;
+use crate::material::Material;
 
 #[derive(Clone)]
 pub struct Hitrecord {
     pub p : Point3,
     pub normal : Vec3,
-    pub material : Box<dyn Materialize>,
+    pub material : Box<dyn Material>,
     pub t: f64,
     pub front: bool
 
@@ -15,14 +15,14 @@ pub struct Hitrecord {
 
 impl Hitrecord {
 
-    pub fn rec(p : Point3, normal: Vec3, material: Box<dyn Materialize>,t : f64, front: bool) -> Hitrecord {
+    pub fn rec(p : Point3, normal: Vec3, material: Box<dyn Material>,t : f64, front: bool) -> Hitrecord {
         Hitrecord{ p, normal,material, t ,front}
     }
 
     pub fn new_empty() -> Hitrecord {
         let p = point3(0.0,0.0,0.0);
         let normal = vector(0.0,0.0,0.0);
-        let material : Box<dyn Materialize> = Box::new(());
+        let material : Box<dyn Material> = Box::new(());
         let t = 0.0;
         let front = false;
         Hitrecord::rec(p,normal,material,t,front)

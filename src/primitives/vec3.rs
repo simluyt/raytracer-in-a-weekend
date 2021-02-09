@@ -1,5 +1,5 @@
 use std::{ops, fmt};
-use crate::math::rand::{random_float, random_float_range};
+use crate::util::*;
 
 
 #[derive(Clone, Copy)]

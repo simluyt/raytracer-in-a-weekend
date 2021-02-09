@@ -1,5 +1,5 @@
 use crate::primitives::color::Color;
-use crate::material::materialize::Materialize;
+use crate::material::Material;
 use crate::primitives::ray::Ray;
 use crate::primitives::hitrecord::Hitrecord;
 use crate::primitives::point3::random_unit_vector;
@@ -9,8 +9,14 @@ pub struct Lambertian {
     albedo: Color,
 }
 
+impl Lambertian {
+    pub fn new(albedo : Coloralbedo : Color) {
+        unimplemented!();
+    }
+}
 
-impl Materialize for Lambertian {
+
+impl Material for Lambertian {
     fn scatter(&self, _r_in :&Ray, rec : &mut Hitrecord, attenuation : &mut Color ,scattered: &mut Ray) -> bool {
         let scatter_direction = rec.normal + random_unit_vector();
         *scattered = Ray::ray(rec.p, scatter_direction);
@@ -19,6 +25,8 @@ impl Materialize for Lambertian {
     }
 }
 
-pub fn lambertian(albedo : Color) -> Lambertian {
+
+
+pub fn lambertian() -> Lambertian {
     Lambertian { albedo }
 }

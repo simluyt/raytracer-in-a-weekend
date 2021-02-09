@@ -1,6 +1,6 @@
 use std::io::{Write};
 use std::fs::File;
-use crate::util::util::clamp;
+use crate::util::clamp;
 use crate::primitives::vec3::Vec3;
 
 pub type Color = Vec3;

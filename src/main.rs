@@ -1,24 +1,21 @@
 use std::fs::File;
 use std::io::{Write, Error};
-use primitives::vec3::{unit, dot};
+use primitives::vec3::*;
 use primitives::color::{Color, color, write_color};
 use primitives::ray::{Ray};
-use primitives::point3::{Point3, point3};
+use primitives::point3::*;
 use primitives::hittable::Hittable;
 use primitives::hittables::Hittables;
 use primitives::hitrecord::Hitrecord;
 use primitives::sphere::Sphere;
-use crate::primitives::camera::Camera;
-use crate::math::rand::random_float;
-use crate::primitives::point3::{random_in_unit_sphere, random_unit_vector, random_in_hemisphere};
+use primitives::camera::Camera;
 use material::lambertian::{lambertian};
 use material::metal::{metal};
-use crate::primitives::vec3::Vec3;
+use util::random_float;
 
 mod primitives;
 mod material;
 mod util;
-mod math;
 
 fn hit_sphere( center: Point3, radius : f64, r: Ray) -> f64 {
     let oc = r.origin() - center;
@@ -86,13 +83,13 @@ fn main() -> Result<(), Error> {
         items: vec![]
     };
 
-    let material_ground = lambertian(color(0.8, 0.8, 0.0));
-    let material_center = lambertian(color(0.7, 0.3, 0.3));
+    let material_ground = Box::new(lambertian(color(0.8, 0.8, 0.0)));
+    let material_center = Box::new(lambertian(color(0.7, 0.3, 0.3)));
     let material_left   = metal(color(0.8, 0.8, 0.8));
     let material_right  = metal(color(0.8, 0.6, 0.2));
 
-    world.add(Sphere::sphere(point3(0.0,0.0,-1.0), 0.5, Box::new(material_ground)));
-    world.add(Sphere::sphere(point3(0.0,-100.5,-1.0), 100.0, Box::new(material_center)));
+    world.add(Sphere::sphere(point3(0.0,0.0,-1.0), 0.5, material_ground));
+    world.add(Sphere::sphere(point3(0.0,-100.5,-1.0), 100.0, material_center));
 
 
     // Camera

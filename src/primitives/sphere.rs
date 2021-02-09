@@ -3,16 +3,16 @@ use crate::primitives::hitrecord::Hitrecord;
 use crate::primitives::ray::Ray;
 use crate::primitives::vec3::dot;
 use crate::primitives::point3::Point3;
-use crate::material::materialize::Materialize;
+use crate::material::Material;
 
 pub struct Sphere {
     center: Point3,
     radius : f64,
-    material : Box<dyn Materialize>,
+    material : Box<dyn Material>,
 }
 
 impl Sphere {
-    pub fn sphere(center : Point3, radius: f64, material: Box<dyn Materialize>) -> Box<Sphere> {
+    pub fn sphere(center : Point3, radius: f64, material: Box<dyn Material>) -> Box<Sphere> {
         Box::new(Sphere{ center, radius, material})
     }
 }
@@ -39,7 +39,7 @@ impl Hittable for Sphere {
         rec.p = r.at(rec.t);
         let outward_normal = (rec.p -self.center) / self.radius;
         rec.set_face_normal(r, outward_normal);
-        rec.material = *self.material;
+        rec.material = Box::new(*self.material);
 
         true
     }
