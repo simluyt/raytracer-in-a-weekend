@@ -4,15 +4,16 @@ use crate::primitives::ray::Ray;
 use crate::primitives::vec3::dot;
 use crate::primitives::point3::Point3;
 use crate::material::Material;
+use std::rc::Rc;
 
 pub struct Sphere {
     center: Point3,
     radius : f64,
-    material : Box<dyn Material>,
+    material : Rc<Box<dyn Material>>,
 }
 
 impl Sphere {
-    pub fn sphere(center : Point3, radius: f64, material: Box<dyn Material>) -> Box<Sphere> {
+    pub fn sphere(center : Point3, radius: f64, material: Rc<Box<dyn Material>>) -> Box<Sphere> {
         Box::new(Sphere{ center, radius, material})
     }
 }

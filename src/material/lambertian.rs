@@ -10,8 +10,8 @@ pub struct Lambertian {
 }
 
 impl Lambertian {
-    pub fn new(albedo : Coloralbedo : Color) {
-        unimplemented!();
+    pub fn new(albedo : Color) -> Lambertian {
+        Lambertian { albedo }
     }
 }
 
@@ -27,6 +27,3 @@ impl Material for Lambertian {
 
 
 
-pub fn lambertian() -> Lambertian {
-    Lambertian { albedo }
-}

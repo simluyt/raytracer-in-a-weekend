@@ -9,9 +9,10 @@ use primitives::hittables::Hittables;
 use primitives::hitrecord::Hitrecord;
 use primitives::sphere::Sphere;
 use primitives::camera::Camera;
-use material::lambertian::{lambertian};
+
 use material::metal::{metal};
 use util::random_float;
+use material::lambertian::Lambertian;
 
 mod primitives;
 mod material;
@@ -83,13 +84,13 @@ fn main() -> Result<(), Error> {
         items: vec![]
     };
 
-    let material_ground = Box::new(lambertian(color(0.8, 0.8, 0.0)));
-    let material_center = Box::new(lambertian(color(0.7, 0.3, 0.3)));
+    let material_ground = Lambertian::new(color(0.8, 0.8, 0.0));
+    let material_center = Lambertian::new(color(0.7, 0.3, 0.3));
     let material_left   = metal(color(0.8, 0.8, 0.8));
     let material_right  = metal(color(0.8, 0.6, 0.2));
 
-    world.add(Sphere::sphere(point3(0.0,0.0,-1.0), 0.5, material_ground));
-    world.add(Sphere::sphere(point3(0.0,-100.5,-1.0), 100.0, material_center));
+    world.add(Sphere::sphere(point3(0.0,0.0,-1.0), 0.5, Box::new(material_ground)));
+    world.add(Sphere::sphere(point3(0.0,-100.5,-1.0), 100.0, Box::new(material_center)));
 
 
     // Camera
