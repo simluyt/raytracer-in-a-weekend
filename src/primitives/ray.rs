@@ -19,5 +19,13 @@ impl Ray {
         Ray{ orig, dir}
     }
 
+    pub fn new() -> Ray {
+        Ray {
+            orig: Vec3 {x: 0.0, y: 0.0, z: 0.0},
+            dir: Vec3 { x: 0.0, y: 0.0, z: 0.0 }
+        }
+        }
+
+
 }
 

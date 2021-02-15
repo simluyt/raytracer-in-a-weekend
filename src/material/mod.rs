@@ -1,11 +1,21 @@
-pub mod lambertian;
-pub mod metal;
+use crate::primitives::color::{Color, color};
 
-use crate::primitives::ray::Ray;
-use crate::primitives::hitrecord::Hitrecord;
-use crate::primitives::color::Color;
+pub struct Material {
+    pub color: Color,
+    pub diffuse: f64,
+    pub specular: f64,
+    pub specular_exponent: f64,
+    pub reflectiveness: f64,
+}
 
-pub trait Material {
-    #[must_use]
-    fn scatter(&self,_r_in :&Ray, _rec : &mut Hitrecord, attenuation : &mut Color, scattered : &mut Ray ) -> bool { false }
+impl Material {
+    pub fn new() -> Material {
+        Material {
+            color: color(0.0,0.0,0.0),
+            diffuse: 0.0,
+            specular: 0.0,
+            specular_exponent: 0.0,
+            reflectiveness: 0.0,
+        }
+    }
 }

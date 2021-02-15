@@ -13,6 +13,7 @@ use primitives::camera::Camera;
 use material::metal::{metal};
 use util::random_float;
 use material::lambertian::Lambertian;
+use std::rc::Rc;
 
 mod primitives;
 mod material;
@@ -32,22 +33,14 @@ fn hit_sphere( center: Point3, radius : f64, r: Ray) -> f64 {
 }
 
 fn ray_color(r : Ray, world: &mut Hittables, depth: i32) -> Color {
-    let mut rec = Hitrecord::new_empty();
+    let mut rec = Hitrecord::new();
 
     if depth <= 0 {
         return color(0.0,0.0,0.0);
     }
 
     if world.hit(&r, 0.001, std::f64::INFINITY, &mut rec) {
-        let mut scattered: Ray = Ray::ray(Vec3 {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0
-        }, Vec3 {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0
-        });
+        let mut scattered: Ray = Ray::new();
         let mut attenuation: Color = color(0.0, 0.0, 0.0);
         if rec.material.scatter(&r, &mut rec, &mut attenuation, &mut scattered) {
             return attenuation * ray_color(scattered,world,depth-1);
@@ -80,17 +73,15 @@ fn main() -> Result<(), Error> {
 
     // World
 
-    let world : &mut Hittables = &mut Hittables {
-        items: vec![]
-    };
+    let world : &mut Hittables = &mut Hittables::new();
 
-    let material_ground = Lambertian::new(color(0.8, 0.8, 0.0));
-    let material_center = Lambertian::new(color(0.7, 0.3, 0.3));
+    let material_ground = Rc::new(Lambertian::new(color(0.8, 0.8, 0.0)));
+    let material_center =  Rc::new(Lambertian::new(color(0.7, 0.3, 0.3)));
     let material_left   = metal(color(0.8, 0.8, 0.8));
     let material_right  = metal(color(0.8, 0.6, 0.2));
 
-    world.add(Sphere::sphere(point3(0.0,0.0,-1.0), 0.5, Box::new(material_ground)));
-    world.add(Sphere::sphere(point3(0.0,-100.5,-1.0), 100.0, Box::new(material_center)));
+    world.add(Sphere::sphere(point3(0.0,0.0,-1.0), 0.5, material_ground));
+    world.add(Sphere::sphere(point3(0.0,-100.5,-1.0), 100.0, material_center));
 
 
     // Camera

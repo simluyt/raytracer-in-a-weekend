@@ -9,6 +9,7 @@ pub struct Hittables {
 impl Hittables {
     pub fn clear(&mut self) { self.items.clear()}
     pub fn add(&mut self, item : Box<dyn Hittable>) { self.items.push(item)}
+    pub fn new() -> Hittables { Hittables{ items: vec![]}}
 }
 
 impl Hittable for Hittables {

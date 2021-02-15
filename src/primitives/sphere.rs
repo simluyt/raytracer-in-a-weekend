@@ -9,11 +9,11 @@ use std::rc::Rc;
 pub struct Sphere {
     center: Point3,
     radius : f64,
-    material : Rc<Box<dyn Material>>,
+    material : Material,
 }
 
 impl Sphere {
-    pub fn sphere(center : Point3, radius: f64, material: Rc<Box<dyn Material>>) -> Box<Sphere> {
+    pub fn sphere(center : Point3, radius: f64, material: Material) -> Box<Sphere> {
         Box::new(Sphere{ center, radius, material})
     }
 }
