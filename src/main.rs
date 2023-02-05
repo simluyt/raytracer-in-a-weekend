@@ -3,14 +3,13 @@ use std::io::{Write, Error};
 use primitives::vec3::{unit, dot};
 use primitives::color::{Color, color, write_color};
 use primitives::ray::{Ray};
-use primitives::point3::{Point3, point3};
+use primitives::point3::{Point3, point3, random_in_hemisphere};
 use primitives::hittable::Hittable;
 use primitives::hittables::Hittables;
 use primitives::hitrecord::Hitrecord;
 use primitives::sphere::Sphere;
 use crate::primitives::camera::Camera;
 use crate::math::rand::random_float;
-use crate::primitives::point3::{random_in_unit_sphere, random_unit_vector};
 
 mod primitives;
 mod util;
@@ -37,7 +36,8 @@ fn ray_color(r : Ray, world: &mut Hittables, depth: i32) -> Color {
     }
 
     if world.hit(&r, 0.001, std::f64::INFINITY, &mut rec) {
-        let target = rec.p + rec.normal + random_unit_vector();
+        //let target = rec.p + rec.normal + random_unit_vector();
+        let target = rec.p + random_in_hemisphere(rec.normal);
         //return 0.5* ((rec.normal + color(1.0,1.0,1.0)));
         return 0.5* ray_color(Ray::ray(rec.p,target-rec.p), world,depth-1);
     }
@@ -59,7 +59,7 @@ fn main() -> Result<(), Error> {
 
     let samples = 100;
 
-    let max : i32 = 5;
+    let max : i32 = 50;
 
     // World
 
@@ -96,13 +96,8 @@ fn main() -> Result<(), Error> {
             write_color(&mut output, pixel_color, samples);
         }
     }
-
-
-
+    
     Ok(())
-
-
-
 }
 
 

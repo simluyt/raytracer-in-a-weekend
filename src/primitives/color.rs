@@ -22,7 +22,8 @@ pub fn write_color(out: &mut File, pixel : Color, samples : i32) {
                     256.0 * clamp(g.sqrt(), 0.0, 0.999),
                     256.0 * clamp(b.sqrt(), 0.0, 0.999));
 
-    out.write(r.as_bytes());
+    let r = out.write(r.as_bytes()).unwrap();
+
 }
 
 pub fn color( x : f64, y : f64, z: f64) -> Color {

@@ -12,7 +12,7 @@ pub struct Vec3 {
 impl Vec3 {
 
     pub fn length(&self) -> f64 {
-        (self.length_squared().sqrt())
+        self.length_squared().sqrt()
     }
 
     pub fn length_squared(&self) -> f64 {
