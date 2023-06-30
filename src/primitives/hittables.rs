@@ -1,18 +1,22 @@
-use crate::primitives::hittable::Hittable;
 use crate::primitives::hitrecord::Hitrecord;
+use crate::primitives::hittable::Hittable;
 use crate::primitives::ray::Ray;
 
 pub struct Hittables {
-    pub(crate) items :  Vec<Box<dyn Hittable>>
+    pub(crate) items: Vec<Box<dyn Hittable>>,
 }
 
 impl Hittables {
-    pub fn clear(&mut self) { self.items.clear()}
-    pub fn add(&mut self, item : Box<dyn Hittable>) { self.items.push(item)}
+    pub fn clear(&mut self) {
+        self.items.clear()
+    }
+    pub fn add(&mut self, item: Box<dyn Hittable>) {
+        self.items.push(item)
+    }
 }
 
 impl Hittable for Hittables {
-    fn hit(&self, r :&Ray, t_min : f64, t_max : f64, rec: &mut Hitrecord) -> bool {
+    fn hit(&self, r: &Ray, t_min: f64, t_max: f64, rec: &mut Hitrecord) -> bool {
         let mut temp_rec = rec;
         let mut hit_anything = false;
         let mut closest_so_far = t_max;

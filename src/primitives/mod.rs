@@ -1,11 +1,12 @@
-pub mod vec3;
+pub mod camera;
 pub mod color;
+pub mod hitrecord;
+pub mod hittable;
+pub mod hittables;
+pub mod lambertian;
+pub mod material;
+pub mod metal;
 pub mod point3;
 pub mod ray;
-pub mod hittable;
 pub mod sphere;
-pub mod hitrecord;
-pub mod hittables;
-pub mod camera;
-
-
+pub mod vec3;
