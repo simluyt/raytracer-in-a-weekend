@@ -1,5 +1,6 @@
 pub mod camera;
 pub mod color;
+pub mod dielectric;
 pub mod hitrecord;
 pub mod hittable;
 pub mod hittables;

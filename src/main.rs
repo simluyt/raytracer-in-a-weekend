@@ -1,6 +1,7 @@
 use crate::math::rand::random_float;
 use crate::primitives::camera::Camera;
 use primitives::color::{color, write_color, Color};
+use primitives::dielectric::Dielectric;
 use primitives::hitrecord::Hitrecord;
 use primitives::hittable::Hittable;
 use primitives::hittables::Hittables;
@@ -74,9 +75,9 @@ fn main() -> Result<(), Error> {
     let world: &mut Hittables = &mut Hittables { items: vec![] };
 
     let material_ground = Rc::new(Lambertian::new(color(0.8, 0.8, 0.0)));
-    let material_center = Rc::new(Lambertian::new(color(0.7, 0.3, 0.3)));
-    let material_left = Rc::new(Metal::new(color(0.8, 0.8, 0.8)));
-    let material_right = Rc::new(Metal::new(color(0.8, 0.6, 0.2)));
+    let material_center = Rc::new(Lambertian::new(color(0.1, 0.2, 0.5)));
+    let material_left = Rc::new(Dielectric::new(1.5));
+    let material_right = Rc::new(Metal::new(color(0.8, 0.6, 0.2), 0.0));
 
     world.add(Box::new(Sphere::sphere(
         point3(0.0, 0.0, -1.0),

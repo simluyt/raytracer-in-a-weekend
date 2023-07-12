@@ -204,6 +204,13 @@ pub fn reflect(v: Vec3, n: Vec3) -> Vec3 {
     v - 2.0 * dot(v, n) * n
 }
 
+pub fn refract(uv: Vec3, n: Vec3, etai_over_etat: f64) -> Vec3 {
+    let cos_theta = dot(-uv, n);
+    let r_out_parallel = etai_over_etat * (uv + cos_theta * n);
+    let r_out_perp = -(1.0 - r_out_parallel.length_squared()).sqrt() * n;
+    return r_out_parallel + r_out_perp;
+}
+
 pub fn random_vector() -> Vec3 {
     return vector(random_float(), random_float(), random_float());
 }
