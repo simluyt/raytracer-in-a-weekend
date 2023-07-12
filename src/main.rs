@@ -94,9 +94,15 @@ fn main() -> Result<(), Error> {
         0.5,
         material_right.clone(),
     )));
+
     world.add(Box::new(Sphere::sphere(
         point3(-1.0, 0.0, -1.0),
         0.5,
+        material_left.clone(),
+    )));
+    world.add(Box::new(Sphere::sphere(
+        point3(-1.0, 0.0, -1.0),
+        -0.4,
         material_left.clone(),
     )));
 
