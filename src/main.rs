@@ -108,7 +108,7 @@ fn main() -> Result<(), Error> {
 
     // Camera
 
-    let camera = Camera::camera();
+    let camera = Camera::camera(90.0, ratio);
 
     // Render
 
