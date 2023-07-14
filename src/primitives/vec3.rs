@@ -215,7 +215,7 @@ pub fn random_vector() -> Vec3 {
     return vector(random_float(), random_float(), random_float());
 }
 
-pub fn random_vector_range(min: i32, max: i32) -> Vec3 {
+pub fn random_vector_range(min: f64, max: f64) -> Vec3 {
     return vector(
         random_float_range(min, max),
         random_float_range(min, max),
@@ -225,7 +225,7 @@ pub fn random_vector_range(min: i32, max: i32) -> Vec3 {
 
 pub fn random_in_unit_disk() -> Vec3 {
     loop {
-        let p = random_vector_range(-1, 1);
+        let p = random_vector_range(-1.0, 1.0);
         if p.length_squared() >= 1.0 {
             continue;
         }

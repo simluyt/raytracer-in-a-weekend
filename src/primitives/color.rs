@@ -1,3 +1,4 @@
+use crate::math::rand::random_float_range;
 use crate::primitives::vec3::Vec3;
 use crate::util::util::clamp;
 use std::fs::File;
@@ -27,4 +28,16 @@ pub fn write_color(out: &mut File, pixel: Color, samples: i32) {
 
 pub fn color(x: f64, y: f64, z: f64) -> Color {
     Vec3 { x, y, z }
+}
+
+pub fn random_color() -> Color {
+    color(rand::random(), rand::random(), rand::random())
+}
+
+pub fn random_color_range(min: f64, max: f64) -> Color {
+    color(
+        random_float_range(min, max),
+        random_float_range(min, max),
+        random_float_range(min, max),
+    )
 }
