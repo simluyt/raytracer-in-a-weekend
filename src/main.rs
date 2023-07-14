@@ -108,13 +108,13 @@ fn main() -> Result<(), Error> {
 
     // Camera
 
-    let camera = Camera::camera(
-        point3(-2.0, 2.0, 1.0),
-        point3(0.0, 1.0, 0.0),
-        vector(0.0, 1.0, 0.0),
-        90.0,
-        ratio,
-    );
+    let lookfrom = point3(3.0, 3.0, 2.0);
+    let lookat = point3(0.0, 0.0, -1.0);
+    let vup = vector(0.0, 1.0, 0.0);
+    let dist_to_focus = (lookfrom - lookat).length();
+    let aperture = 2.0;
+
+    let camera = Camera::camera(lookfrom, lookat, vup, 20.0, ratio, aperture, dist_to_focus);
 
     // Render
 
