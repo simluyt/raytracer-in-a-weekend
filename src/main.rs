@@ -7,10 +7,10 @@ use primitives::hittable::Hittable;
 use primitives::hittables::Hittables;
 use primitives::lambertian::Lambertian;
 use primitives::metal::Metal;
-use primitives::point3::{point3, random_in_hemisphere, Point3};
+use primitives::point3::{point3, Point3};
 use primitives::ray::Ray;
 use primitives::sphere::Sphere;
-use primitives::vec3::{dot, unit};
+use primitives::vec3::{dot, unit, vector};
 use std::fs::File;
 use std::io::{Error, Write};
 use std::rc::Rc;
@@ -108,7 +108,13 @@ fn main() -> Result<(), Error> {
 
     // Camera
 
-    let camera = Camera::camera(90.0, ratio);
+    let camera = Camera::camera(
+        point3(-2.0, 2.0, 1.0),
+        point3(0.0, 1.0, 0.0),
+        vector(0.0, 1.0, 0.0),
+        90.0,
+        ratio,
+    );
 
     // Render
 

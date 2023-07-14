@@ -2,6 +2,8 @@ use crate::primitives::point3::{point3, Point3};
 use crate::primitives::ray::Ray;
 use crate::primitives::vec3::{vector, Vec3};
 
+use super::vec3::{cross, unit};
+
 pub struct Camera {
     origin: Point3,
     lower_left_corner: Point3,
@@ -10,18 +12,27 @@ pub struct Camera {
 }
 
 impl Camera {
-    pub fn camera(vfov: f64, aspect_ratio: f64) -> Camera {
+    pub fn camera(
+        loofrom: Point3,
+        lookat: Point3,
+        vup: Vec3,
+        vfov: f64,
+        aspect_ratio: f64,
+    ) -> Camera {
         let theta = vfov.to_radians();
         let h = (std::f64::consts::PI / 3.0).tan() / 2.0;
         let viewport_height = 2.0 * h;
         let viewport_width = aspect_ratio * viewport_height;
         let focal_length = 1.0;
 
-        let origin = point3(0.0, 0.0, 0.0);
-        let horizontal = vector(viewport_width, 0.0, 0.0);
-        let vertical = vector(0.0, viewport_height, 0.0);
-        let lower_left_corner =
-            origin - horizontal / 2.0 - vertical / 2.0 - vector(0.0, 0.0, focal_length);
+        let w = unit(loofrom - lookat);
+        let u = unit(cross(vup, w));
+        let v = cross(w, u);
+
+        let origin = loofrom;
+        let horizontal = viewport_width * u;
+        let vertical = viewport_height * v;
+        let lower_left_corner = origin - horizontal / 2.0 - vertical / 2.0 - w;
         Camera {
             origin,
             horizontal,
